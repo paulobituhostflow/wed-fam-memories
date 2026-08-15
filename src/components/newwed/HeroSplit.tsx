@@ -48,26 +48,40 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
       <div className="flex flex-col items-center justify-center bg-white px-8 py-16">
         <div
           style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 700,
-            letterSpacing: "0.18em",
-            fontSize: "1.5rem",
-            color: "#191010",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+            maxWidth: 360,
             textAlign: "center",
-            lineHeight: 1.2,
           }}
         >
-          NEWED DESTINOS
+          <img
+            src="/logo-newed-destinos-transparent.png"
+            alt="Newed Destinos"
+            width={225}
+            height={225}
+            style={{
+              display: "block",
+              width: "100%",
+              maxWidth: 225,
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
           <div
             style={{
-              fontWeight: 400,
-              letterSpacing: "0.28em",
-              fontSize: "0.85rem",
+              marginTop: "1.25rem",
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 500,
+              letterSpacing: "0.12em",
+              fontSize: "clamp(0.62rem, 1.2vw, 0.78rem)",
               color: "#2E8E8E",
-              marginTop: "0.4rem",
+              lineHeight: 1.7,
+              textTransform: "uppercase",
             }}
           >
-            NORDESTE
+            RIO GRANDE DO NORTE - ALAGOAS - FERNANDO DE NORONHA • CEARÁ
           </div>
         </div>
         <div
@@ -186,7 +200,7 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
                 color: "rgba(255,255,255,0.8)",
               }}
             >
-              4 edições • Vagas limitadas.
+              4 EDIÇÕES • VAGAS LIMITADAS
             </div>
           </div>
 
