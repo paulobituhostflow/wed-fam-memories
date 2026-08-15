@@ -1,99 +1,143 @@
-/**
- * ParceirosLogos — Seção de logotipos de marcas e parceiros
- *
- * Para adicionar/trocar logos:
- * 1. Coloque os arquivos de imagem na pasta /public (PNG ou WebP com fundo transparente)
- * 2. Edite o array LOGOS abaixo com os caminhos e nome acessível (alt)
- *
- * Efeito: grayscale + opacidade reduzida → cor original ao hover.
- */
+const PARCEIROS = [
+  {
+    name: "Azul",
+    src: "/azul- branca.webp",
+    height: 36,
+  },
+  {
+    name: "Casar.com",
+    src: "/casar-logo-white.svg",
+    height: 38,
+  },
+  {
+    name: "Assessoria VIP",
+    src: "/assessoria-vip-white.png",
+    height: 64,
+  },
+  {
+    name: "Empetur",
+    src: "/empetur - Branca.webp",
+    height: 50,
+  },
+] as const;
 
-// ─── LOGOS — edite aqui ───────────────────────────────────────────────────
-const LOGOS: { src: string; alt: string }[] = [
-  { src: "/empetur - Branca.webp", alt: "Empetur" },
-  { src: "/azul- branca.webp",     alt: "Azul Linhas Aéreas" },
-  // Adicione mais parceiros aqui:
-  // { src: "/parceiro-3.webp", alt: "Nome do Parceiro" },
-];
-// ─────────────────────────────────────────────────────────────────────────
+const dividerStyle = {
+  width: 1,
+  height: 48,
+  margin: "0 24px",
+  flex: "0 0 auto",
+  background: "rgba(231, 200, 138, 0.78)",
+} as const;
 
+/** Faixa compacta de marcas parceiras, com rolagem horizontal no mobile. */
 export function ParceirosLogos() {
   return (
     <section
+      aria-label="Marcas e Parceiros"
       style={{
-        background: "#191010",
-        padding: "3.5rem 1.5rem",
-        borderTop: "1px solid rgba(255,255,255,0.07)",
-        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        width: "100%",
+        margin: 0,
+        overflow: "hidden",
+        backgroundColor: "#360005",
+        backgroundImage: "url(/marcas-parceiros-fundo-faixa.png)",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
       }}
     >
-      {/* Título discreto */}
       <div
+        className="partners-logo-ticker [&::-webkit-scrollbar]:hidden"
         style={{
-          textAlign: "center",
-          marginBottom: "2.5rem",
+          width: "100%",
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "28px 24px",
+          display: "flex",
+          flexWrap: "nowrap",
+          alignItems: "center",
+          overflowX: "auto",
+          scrollbarWidth: "none",
         }}
       >
-        <span
+        <p
           style={{
+            margin: 0,
+            flex: "0 0 auto",
+            color: "#E7C88A",
             fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 400,
-            fontSize: "0.75rem",
-            letterSpacing: "0.32em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.45)",
+            fontSize: "0.72rem",
+            fontWeight: 500,
+            letterSpacing: "0.22em",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
           }}
         >
-          Marcas e Parceiros
-        </span>
-      </div>
+          MARCAS E PARCEIROS
+        </p>
 
-      {/* Grade de logos */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "2.5rem 3.5rem",
-          maxWidth: 960,
-          margin: "0 auto",
-        }}
-      >
-        {LOGOS.map(({ src, alt }) => (
-          <div
-            key={src}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              src={src}
-              alt={alt}
-              loading="lazy"
+        <span aria-hidden="true" style={dividerStyle} />
+
+        <ul
+          aria-label="Logomarcas parceiras"
+          role="list"
+          style={{
+            margin: 0,
+            padding: 0,
+            display: "flex",
+            flex: "1 0 auto",
+            flexWrap: "nowrap",
+            alignItems: "center",
+            listStyle: "none",
+          }}
+        >
+          {PARCEIROS.map(({ name, src, height }, index) => (
+            <li
+              key={name}
+              role="listitem"
               style={{
-                height: 48,
-                width: "auto",
-                maxWidth: 140,
-                objectFit: "contain",
-                /* Efeito inicial: cinza + opacidade */
-                filter: "grayscale(100%)",
-                opacity: 0.45,
-                transition: "filter 0.35s ease, opacity 0.35s ease",
+                display: "flex",
+                flex: "0 0 auto",
+                alignItems: "center",
               }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLImageElement).style.filter = "grayscale(0%)";
-                (e.currentTarget as HTMLImageElement).style.opacity = "1";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLImageElement).style.filter = "grayscale(100%)";
-                (e.currentTarget as HTMLImageElement).style.opacity = "0.45";
-              }}
-            />
-          </div>
-        ))}
+            >
+              <img
+                src={src}
+                alt={name}
+                loading="lazy"
+                style={{
+                  display: "block",
+                  width: "auto",
+                  height,
+                  maxHeight: height,
+                  objectFit: "contain",
+                  flex: "0 0 auto",
+                }}
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
+                  const fallback = event.currentTarget
+                    .nextElementSibling as HTMLElement | null;
+                  if (fallback) fallback.style.display = "inline-block";
+                }}
+              />
+              <span
+                style={{
+                  display: "none",
+                  color: "#FFFFFF",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "0.78rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {name}
+              </span>
+              {index < PARCEIROS.length - 1 ? (
+                <span aria-hidden="true" style={dividerStyle} />
+              ) : null}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

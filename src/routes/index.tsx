@@ -94,6 +94,9 @@ function AplicarPage() {
           <>
             <HeroSplit onCta={() => scrollTo("famtours")} />
 
+            {/* Parceiros e marcas apoiadoras */}
+            <ParceirosLogos />
+
             {/* O que é */}
             <section
               style={{
@@ -241,9 +244,6 @@ function AplicarPage() {
                 ))}
               </div>
             </section>
-
-            {/* Parceiros e marcas apoiadoras */}
-            <ParceirosLogos />
 
             {/* CTA pré-form */}
             <section
