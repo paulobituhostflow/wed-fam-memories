@@ -12,11 +12,31 @@ import { PreInscricaoForm } from "@/components/newwed/PreInscricaoForm";
 import { SuccessScreen } from "@/components/newwed/SuccessScreen";
 import { getFamToursAtivos } from "@/lib/api";
 import type { PreInscricaoData } from "@/lib/schemas/preInscricao";
-import { MapPin, Handshake, ClipboardList, Sparkles } from "lucide-react";
+import noronhaImg from "@/assets/fantour-noronha.jpg";
+import rioGrandeDoNorteImg from "@/assets/dest-rn.jpg";
+import alagoasImg from "@/assets/dest-milagres.jpg";
 
 const searchSchema = z.object({
   edicao: z.string().optional(),
 });
+
+const EDICOES_ANTERIORES = [
+  {
+    slug: "fernando-de-noronha",
+    title: "Fernando de Noronha",
+    image: noronhaImg,
+  },
+  {
+    slug: "rio-grande-do-norte",
+    title: "Rio Grande do Norte",
+    image: rioGrandeDoNorteImg,
+  },
+  {
+    slug: "alagoas",
+    title: "Alagoas",
+    image: alagoasImg,
+  },
+];
 
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
@@ -120,7 +140,7 @@ function AplicarPage() {
                 Não é viagem.
                 <br />
                 <em style={{ fontStyle: "italic", fontWeight: 300 }}>
-                  É imersão profissional.
+                  É uma especialização no destino.
                 </em>
               </h2>
               <p
@@ -134,77 +154,122 @@ function AplicarPage() {
                   textAlign: "center",
                 }}
               >
-                O Famtour Newed é uma experiência fechada e curada para assessores e profissionais de casamentos que buscam autoridade no mercado de Destination Wedding. Você vivencia cada detalhe de um casamento à distância — do planejamento à execução — guiada por quem é referência no Nordeste.
+                O Famtour New Wed é uma experiência fechada e curada para
+                assessores e profissionais de casamentos que querem entrar no
+                mercado de Destination Wedding com autoridade, guiada por quem
+                tem autoridade no Nordeste.
               </p>
+              <button
+                type="button"
+                onClick={() => scrollTo("edicoes-anteriores")}
+                style={{
+                  marginTop: "2rem",
+                  background: "#7A2535",
+                  color: "#FFFFFF",
+                  border: "1px solid #7A2535",
+                  padding: "1rem 1.75rem",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  borderRadius: 0,
+                  cursor: "pointer",
+                }}
+              >
+                CONFIRA EDIÇÕES ANTERIORES
+              </button>
             </section>
 
-            {/* Vivências */}
+            {/* Edições anteriores */}
             <section
+              id="edicoes-anteriores"
               style={{
                 maxWidth: 1100,
                 margin: "0 auto",
                 padding: "2rem 1.5rem 4rem",
+                scrollMarginTop: 80,
               }}
             >
-              <Divisor>Vivências</Divisor>
+              <Divisor>EDIÇÕES ANTERIORES</Divisor>
               <div
-                className="grid grid-cols-2 md:grid-cols-4"
-                style={{ gap: "1rem" }}
+                className="grid grid-cols-1 md:grid-cols-3"
+                style={{ gap: "1.25rem" }}
               >
-                {[
-                  {
-                    Icon: MapPin,
-                    title: "Experiências Reais",
-                    text: "Visitas técnicas e imersões em locais que são referência no mercado de casamentos premium no Nordeste.",
-                  },
-                  {
-                    Icon: Handshake,
-                    title: "Conexões",
-                    text: "Conheça pessoalmente os fornecedores que são referência em cada estado do Nordeste e construa parcerias sólidas.",
-                  },
-                  {
-                    Icon: ClipboardList,
-                    title: "Estratégia e Logística",
-                    text: "Entenda os bastidores do planejamento: de deslocamentos e hospedagem à experiência completa dos noivos e convidados.",
-                  },
-                  {
-                    Icon: Sparkles,
-                    title: "GRUPO NEW WED",
-                    text: "Somos um ecossistema dedicado a fortalecer o mercado de casamentos no Nordeste, gerando conexões e oportunidades reais de negócios.",
-                  },
-                ].map(({ Icon, title, text }) => (
-                  <div
-                    key={title}
+                {EDICOES_ANTERIORES.map(({ slug, title, image }) => (
+                  <button
+                    key={slug}
+                    type="button"
+                    data-gallery-key={slug}
+                    aria-label={`Galeria de fotos de ${title}`}
+                    className="group relative block w-full cursor-pointer overflow-hidden text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8E8E] focus-visible:ring-offset-2"
                     style={{
-                      background: "#F7F4EE",
-                      padding: "1.5rem",
+                      aspectRatio: "4 / 5",
                       borderRadius: 0,
+                      border: 0,
+                      padding: 0,
+                      background: "#0a2b28",
                     }}
                   >
-                    <Icon size={22} color="#2E8E8E" strokeWidth={1.5} />
-                    <div
+                    <img
+                      src={image}
+                      alt={title}
+                      loading="lazy"
+                      className="transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]"
                       style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontWeight: 500,
-                        fontSize: "1rem",
-                        color: "#191010",
-                        marginTop: "0.75rem",
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <div
+                      aria-hidden
+                      className="transition-opacity duration-500 group-hover:opacity-95 group-focus-visible:opacity-95"
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(to top, rgba(10,43,40,0.88) 0%, rgba(10,43,40,0.08) 65%)",
+                      }}
+                    />
+                    <div
+                      className="transition-transform duration-500 group-hover:-translate-y-1 group-focus-visible:-translate-y-1"
+                      style={{
+                        position: "absolute",
+                        left: "1.25rem",
+                        right: "1.25rem",
+                        bottom: "1.25rem",
+                        color: "#FFFFFF",
                       }}
                     >
-                      {title}
+                      <div
+                        style={{
+                          fontFamily: "'Cormorant Garamond', serif",
+                          fontWeight: 400,
+                          fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                          lineHeight: 1.1,
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {title}
+                      </div>
+                      <div
+                        style={{
+                          marginTop: "0.65rem",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontWeight: 500,
+                          fontSize: "0.65rem",
+                          letterSpacing: "0.18em",
+                          textTransform: "uppercase",
+                          color: "rgba(255,255,255,0.72)",
+                        }}
+                      >
+                        GALERIA DE FOTOS
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: "0.8rem",
-                        color: "rgba(25,16,16,0.7)",
-                        marginTop: "0.4rem",
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      {text}
-                    </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </section>
@@ -268,7 +333,12 @@ function AplicarPage() {
               />
               <div
                 className="relative"
-                style={{ zIndex: 2, maxWidth: 600, margin: "0 auto", textAlign: "center" }}
+                style={{
+                  zIndex: 2,
+                  maxWidth: 600,
+                  margin: "0 auto",
+                  textAlign: "center",
+                }}
               >
                 <h2
                   style={{
@@ -292,7 +362,9 @@ function AplicarPage() {
                     lineHeight: 1.6,
                   }}
                 >
-                  Preencha sua pré-inscrição agora. Nossa equipe entrará em contato via WhatsApp em até 24h para confirmar sua vaga e enviar os detalhes de pagamento.
+                  Preencha sua pré-inscrição agora. Nossa equipe entrará em
+                  contato via WhatsApp em até 24h para confirmar sua vaga e
+                  enviar os detalhes de pagamento.
                 </p>
                 <button
                   type="button"
@@ -349,7 +421,15 @@ function AplicarPage() {
                   textAlign: "center",
                 }}
               >
-                Boas<span style={{ fontFeatureSettings: "'liga' 0, 'dlig' 0, 'calt' 0" }}>-</span>vindas
+                Boas
+                <span
+                  style={{
+                    fontFeatureSettings: "'liga' 0, 'dlig' 0, 'calt' 0",
+                  }}
+                >
+                  -
+                </span>
+                vindas
               </h2>
               <p
                 style={{
@@ -362,9 +442,12 @@ function AplicarPage() {
                   textAlign: "center",
                 }}
               >
-                Estamos felizes por ter você aqui.  
-                Queremos conhecer um pouco sobre você e entender seu perfil. A partir desta pré-inscrição, nossa equipe entrará em contato para apresentar todos os detalhes da experiência, esclarecer suas dúvidas e orientar você sobre os próximos passos.  
-                Preencha as informações abaixo. Será um prazer ter você conosco nesta imersão.
+                Estamos felizes por ter você aqui. Queremos conhecer um pouco
+                sobre você e entender seu perfil. A partir desta pré-inscrição,
+                nossa equipe entrará em contato para apresentar todos os
+                detalhes da experiência, esclarecer suas dúvidas e orientar você
+                sobre os próximos passos. Preencha as informações abaixo. Será
+                um prazer ter você conosco nesta imersão.
               </p>
               <PreInscricaoForm
                 famtours={famtours}
