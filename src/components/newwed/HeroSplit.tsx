@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
  */
 const SLIDES = [
   "/LE040347.webp",
-  "/LE049274.webp",
   "/LE049367.webp",
   "/WhatsApp-Image-2018-12-26-at-10.03.03.webp",
   "/LE048829.webp",

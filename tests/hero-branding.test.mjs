@@ -79,6 +79,13 @@ test("hero keeps the offer and CTA inside one mobile-first visual panel", async 
   assert.match(html, /min-h-\[calc\(100svh-4rem\)\][^\"]*md:min-h-\[90vh\]/);
 });
 
+test("hero carousel omits the rejected party photo and keeps four approved slides", async () => {
+  const { html } = await renderHero();
+
+  assert.doesNotMatch(html, /LE049274\.webp/);
+  assert.equal((html.match(/aria-label="Slide \d+"/g) ?? []).length, 4);
+});
+
 test("WhatsApp control uses a smaller safe mobile footprint", async () => {
   const { whatsappHtml } = await renderHero();
 
