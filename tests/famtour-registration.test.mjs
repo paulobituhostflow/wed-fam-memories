@@ -36,6 +36,7 @@ async function loadFeatureFixture() {
           import { RegistrationSummary } from "${sourcePath("../src/components/newwed/inscricao/RegistrationSummary.tsx")}";
           import { InscricaoPage, EditionNotFound } from "${sourcePath("../src/routes/inscricao.$slug.tsx")}";
           import { buildSuccessWhatsAppMessage, FAMTOUR_EDITIONS, getFamtourBySlug, toLegacyFamTour } from "${sourcePath("../src/lib/famtours.ts")}";
+          import { preInscricaoSchema } from "${sourcePath("../src/lib/schemas/preInscricao.ts")}";
 
           const edition = FAMTOUR_EDITIONS[1];
           const cearaEdition = FAMTOUR_EDITIONS[3];
@@ -86,6 +87,20 @@ async function loadFeatureFixture() {
               }),
             ),
           );
+          export const openDestinationAccepted = preInscricaoSchema.safeParse({
+            nome: "Maria Silva",
+            email: "maria@example.com",
+            telefone: "84999999999",
+            empresa: "Assessoria Maria",
+            cidade_estado: "Natal - RN",
+            respostas_brutas: {
+              status_dw: "JA_TRABALHA",
+              tem_casal_nordeste: "sim",
+              destino_interesse: "Jericoacoara",
+              expectativa: "Quero conhecer novas possibilidades de destino.",
+            },
+            lgpd: true,
+          }).success;
           export const successMessage = buildSuccessWhatsAppMessage(
             "Maria",
             edition.nome,
@@ -200,6 +215,25 @@ test("renders the approved landing copy and Famtour spelling", async () => {
   assert.doesNotMatch(html, /Escolha a sua imersão|Boas-vindas/);
   assert.doesNotMatch(`${html}${successMessage}`, /FamTour/);
   assert.match(successMessage, /Famtour Newed Destinos/);
+});
+
+test("collects another destination in an open text field", async () => {
+  const { interestFormHtml, openDestinationAccepted } =
+    await loadFeatureFixture();
+
+  assert.match(
+    interestFormHtml,
+    /Qual outro destino você tem interesse\?/,
+  );
+  assert.match(
+    interestFormHtml,
+    /name="respostas_brutas\.destino_interesse"/,
+  );
+  assert.doesNotMatch(
+    interestFormHtml,
+    /São Miguel do Gostoso|Praia da Pipa|São Miguel dos Milagres/,
+  );
+  assert.equal(openDestinationAccepted, true);
 });
 
 test("uses a neutral fallback when the Ceará edition has no official image", async () => {

@@ -26,14 +26,6 @@ function normalizeTelefone(value: string): string {
   return d.startsWith("55") ? d : `55${d}`;
 }
 
-const DESTINOS: { label: string; value: string }[] = [
-  { label: "Fernando de Noronha", value: "NORONHA" },
-  { label: "São Miguel do Gostoso", value: "GOSTOSO" },
-  { label: "Praia da Pipa", value: "PIPA" },
-  { label: "São Miguel dos Milagres", value: "MILAGRES" },
-  { label: "Outro", value: "OUTRO" },
-];
-
 const labelStyle: React.CSSProperties = {
   display: "block",
   fontFamily: "'DM Sans', sans-serif",
@@ -153,7 +145,7 @@ export function PreInscricaoForm({
         status_dw: undefined as any,
         trabalha_sozinho: "",
         tem_casal_nordeste: undefined as any,
-        destino_interesse: undefined as any,
+        destino_interesse: "",
         destino_outro: "",
         expectativa: "",
         maior_desafio: "",
@@ -221,7 +213,6 @@ export function PreInscricaoForm({
   const status_dw = watch("respostas_brutas.status_dw");
   const trabalha_sozinho = watch("respostas_brutas.trabalha_sozinho");
   const tem_casal_nordeste = watch("respostas_brutas.tem_casal_nordeste");
-  const destino_interesse = watch("respostas_brutas.destino_interesse");
   const famtour_id = watch("famtour_id");
   const lgpd = watch("lgpd");
 
@@ -630,58 +621,25 @@ export function PreInscricaoForm({
           </div>
         )}
 
-        <div>
-          <label style={labelStyle}>
-            Qual outro destino você gostaria de conhecer?{" "}
+        <div data-field="respostas_brutas.destino_interesse">
+          <label htmlFor="destino_interesse" style={labelStyle}>
+            Qual outro destino você tem interesse?{" "}
             <span style={{ color: "#7A2535" }}>*</span>
           </label>
-          <div
-            className="grid grid-cols-2 lg:grid-cols-5"
-            style={{ gap: "0.75rem" }}
-          >
-            {DESTINOS.map((d) => (
-              <OptionCard
-                key={d.value}
-                name="destino_interesse"
-                label={d.label}
-                value={d.value}
-                selected={destino_interesse === d.value}
-                onSelect={(v) => {
-                  setValue("respostas_brutas.destino_interesse", v as any, {
-                    shouldValidate: true,
-                  });
-                  persistDraft();
-                }}
-              />
-            ))}
-          </div>
+          <input
+            id="destino_interesse"
+            type="text"
+            style={inputBaseStyle}
+            {...register("respostas_brutas.destino_interesse", {
+              onBlur: persistDraft,
+            })}
+          />
           {errors.respostas_brutas?.destino_interesse && (
             <div role="alert" style={errorStyle}>
               {errors.respostas_brutas.destino_interesse.message}
             </div>
           )}
         </div>
-
-        {destino_interesse === "OUTRO" && (
-          <div data-field="respostas_brutas.destino_outro">
-            <label htmlFor="destino_outro" style={labelStyle}>
-              Qual destino? <span style={{ color: "#7A2535" }}>*</span>
-            </label>
-            <input
-              id="destino_outro"
-              type="text"
-              style={inputBaseStyle}
-              {...register("respostas_brutas.destino_outro", {
-                onBlur: persistDraft,
-              })}
-            />
-            {errors.respostas_brutas?.destino_outro && (
-              <div role="alert" style={errorStyle}>
-                {errors.respostas_brutas.destino_outro.message}
-              </div>
-            )}
-          </div>
-        )}
 
         <div data-field="respostas_brutas.expectativa">
           <label htmlFor="expectativa" style={labelStyle}>
