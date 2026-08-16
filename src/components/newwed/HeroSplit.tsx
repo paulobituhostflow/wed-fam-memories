@@ -81,7 +81,7 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
               textTransform: "uppercase",
             }}
           >
-            RIO GRANDE DO NORTE - ALAGOAS - FERNANDO DE NORONHA • CEARÁ
+            RIO GRANDE DO NORTE • ALAGOAS • FERNANDO DE NORONHA • CEARÁ
           </div>
         </div>
         <div

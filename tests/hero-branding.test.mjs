@@ -55,7 +55,7 @@ test("hero renders the complete approved destination list", async () => {
 
   assert.match(
     html,
-    /RIO GRANDE DO NORTE - ALAGOAS - FERNANDO DE NORONHA • CEARÁ/,
+    /RIO GRANDE DO NORTE • ALAGOAS • FERNANDO DE NORONHA • CEARÁ/,
   );
 });
 
