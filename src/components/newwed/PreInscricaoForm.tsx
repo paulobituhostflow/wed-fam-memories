@@ -8,7 +8,8 @@ import {
   preInscricaoSchema,
   type PreInscricaoData,
 } from "@/lib/schemas/preInscricao";
-import { submitToBase44Webhook, type FamTour } from "@/lib/api";
+import { submitToBase44Webhook } from "@/lib/api";
+import type { FamtourEdition } from "@/lib/famtours";
 
 const STORAGE_KEY = "newed_aplicar_form_v1";
 
@@ -119,7 +120,7 @@ function SubDivisor({ children }: { children: React.ReactNode }) {
 }
 
 type Props = {
-  famtours: FamTour[];
+  famtours: readonly FamtourEdition[];
   preSelectedSlug?: string;
   onSuccess: (data: PreInscricaoData, famtourNome: string) => void;
 };
@@ -617,7 +618,7 @@ export function PreInscricaoForm({
                 <OptionCard
                   key={f.id}
                   name="famtour_id"
-                  label={`${f.nome} — ${f.sub} · ${f.vagas_restantes} vagas`}
+                  label={`${f.nome} — ${f.periodo} · ${f.vagas} vagas`}
                   value={f.id}
                   selected={famtour_id === f.id}
                   onSelect={(v) => {

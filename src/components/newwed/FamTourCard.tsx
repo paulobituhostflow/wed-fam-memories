@@ -1,195 +1,95 @@
-import { Check } from "lucide-react";
-import type { FamTour } from "@/lib/api";
+import { Check, Plane } from "lucide-react";
+import {
+  formatCurrency,
+  type FamtourEdition,
+} from "@/lib/famtours";
 
 type Props = {
-  famtour: FamTour;
-  onSelect: (slug: string) => void;
+  famtour: FamtourEdition;
+  onLearnMore: (slug: string) => void;
+  onRegister: (slug: string) => void;
 };
 
-export function FamTourCard({ famtour, onSelect }: Props) {
+export function FamTourCard({ famtour, onLearnMore, onRegister }: Props) {
   return (
-    <article
-      className="group flex flex-col bg-white transition-colors"
-      style={{
-        border: "1.5px solid rgba(25,16,16,0.12)",
-        borderRadius: 0,
-      }}
-      onMouseEnter={(e) =>
-        (e.currentTarget.style.borderColor = "#2E8E8E")
-      }
-      onMouseLeave={(e) =>
-        (e.currentTarget.style.borderColor = "rgba(25,16,16,0.12)")
-      }
-    >
+    <article className="group flex h-full flex-col border border-black/15 bg-white transition-colors hover:border-teal-600">
       <img
         src={famtour.imagem}
-        alt={famtour.nome}
+        alt={famtour.imagemAlt}
         loading="lazy"
-        style={{
-          width: "100%",
-          height: 220,
-          objectFit: "cover",
-          display: "block",
-        }}
+        className="h-56 w-full object-cover"
       />
-      <div style={{ padding: "1.5rem 1.5rem 0.5rem" }}>
-        <div
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 400,
-            fontSize: "0.65rem",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "#2E8E8E",
-          }}
-        >
+
+      <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
+        <p className="font-sans text-[0.65rem] uppercase tracking-[0.18em] text-[#2E8E8E]">
           {famtour.label}
-        </div>
-        <h3
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 400,
-            fontSize: "1.8rem",
-            color: "#191010",
-            margin: "0.5rem 0 0.25rem",
-            lineHeight: 1.1,
-          }}
-        >
-          {famtour.nome}
+        </p>
+        <h3 className="mt-2 font-serif text-[1.8rem] font-normal leading-[1.05] text-[#191010]">
+          {famtour.destino}
         </h3>
-        <div
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "0.85rem",
-            color: "rgba(25,16,16,0.65)",
-          }}
-        >
-          {famtour.sub}
-        </div>
-      </div>
-      <ul
-        style={{
-          listStyle: "none",
-          padding: "0 1.5rem 1rem",
-          margin: 0,
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-        }}
-      >
-        {famtour.bullets.map((b) => (
-          <li
-            key={b}
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "0.5rem",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "0.85rem",
-              color: "#191010",
-              lineHeight: 1.6,
-            }}
-          >
-            <Check
-              size={16}
-              color="#2E8E8E"
-              strokeWidth={2.5}
-              style={{ flexShrink: 0, marginTop: 3 }}
-            />
-            <span>{b}</span>
-          </li>
-        ))}
-      </ul>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "0 1.5rem 1rem",
-          gap: "1rem",
-        }}
-      >
-        <div>
-          <div
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "#2E8E8E",
-            }}
-          >
-            VAGAS LIMITADAS
+        <p className="mt-2 font-sans text-sm text-black/65">
+          {famtour.periodo}
+        </p>
+
+        <ul className="my-5 flex flex-col gap-2">
+          {famtour.inclusos
+            .filter((item) => item !== "Aéreo incluso")
+            .map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-2 font-sans text-sm leading-relaxed text-[#191010]"
+              >
+                <Check
+                  aria-hidden="true"
+                  size={16}
+                  color="#2E8E8E"
+                  strokeWidth={2.5}
+                  className="mt-1 shrink-0"
+                />
+                <span>{item}</span>
+              </li>
+            ))}
+        </ul>
+
+        <div className="mt-auto border-t border-black/10 pt-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="font-sans text-xs font-medium uppercase tracking-[0.14em] text-[#7A2535]">
+              {famtour.vagas} VAGAS
+            </span>
+            <span className="inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-[#2E8E8E]">
+              <Plane aria-hidden="true" size={17} strokeWidth={1.8} />
+              AÉREO INCLUSO
+            </span>
           </div>
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 400,
-              fontSize: "2rem",
-              color: "#7A2535",
-              lineHeight: 1,
-              marginTop: 4,
-            }}
-          >
-            {famtour.vagas_restantes}
+
+          <div className="mt-5 text-right">
+            <p className="font-serif text-[clamp(1.8rem,4vw,2.35rem)] leading-none text-[#7A2535]">
+              {famtour.parcelaQuantidade}x de{" "}
+              {formatCurrency(famtour.parcelaCentavos)}
+            </p>
+            <p className="mt-2 font-sans text-xs uppercase tracking-[0.08em] text-black/55">
+              {formatCurrency(famtour.valorAVistaCentavos)} à vista
+            </p>
           </div>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "#2E8E8E",
-            }}
-          >
-            VALOR COM AERO INCLUSO (À VISTA)
-          </div>
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 400,
-              fontSize: "1.4rem",
-              color: "#7A2535",
-              lineHeight: 1,
-              marginTop: 4,
-            }}
-          >
-            {famtour.preco_a_partir_de}
-          </div>
-          <div
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "0.55rem",
-              letterSpacing: "0.05em",
-              color: "rgba(25,16,16,0.5)",
-              marginTop: 4,
-            }}
-          >
-            OU 10X NO CARTÃO (CONSULTE TAXAS)
+
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => onLearnMore(famtour.slug)}
+              className="min-h-12 border border-[#7A2535] bg-white px-4 py-3 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-[#7A2535] transition-colors hover:bg-[#F7F4EE] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2E8E8E]"
+            >
+              SABER MAIS
+            </button>
+            <button
+              type="button"
+              onClick={() => onRegister(famtour.slug)}
+              className="min-h-12 border border-[#7A2535] bg-[#7A2535] px-4 py-3 font-sans text-xs font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#641D2C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2E8E8E]"
+            >
+              FAZER INSCRIÇÃO
+            </button>
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => onSelect(famtour.slug)}
-        style={{
-          background: "#7A2535",
-          color: "#FFFFFF",
-          border: "none",
-          padding: "1rem 1.5rem",
-          fontFamily: "'DM Sans', sans-serif",
-          fontWeight: 500,
-          fontSize: "0.85rem",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          borderRadius: 0,
-          cursor: "pointer",
-          margin: "auto 1.5rem 1.5rem",
-        }}
-      >
-        PRÉ-INSCRIÇÃO →
-      </button>
     </article>
   );
 }

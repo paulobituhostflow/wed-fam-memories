@@ -1,16 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
 import { Toaster } from "sonner";
 import { SiteShell } from "@/components/newwed/SiteShell";
 import { HeroSplit } from "@/components/newwed/HeroSplit";
-import { PhotoMarquee } from "@/components/newwed/PhotoMarquee";
 import { ParceirosLogos } from "@/components/newwed/Parceiros";
 import { FamTourCard } from "@/components/newwed/FamTourCard";
 import { PreInscricaoForm } from "@/components/newwed/PreInscricaoForm";
 import { SuccessScreen } from "@/components/newwed/SuccessScreen";
-import { getFamToursAtivos } from "@/lib/api";
+import { FAMTOUR_EDITIONS } from "@/lib/famtours";
 import type { PreInscricaoData } from "@/lib/schemas/preInscricao";
 import noronhaImg from "@/assets/fantour-noronha.jpg";
 import rioGrandeDoNorteImg from "@/assets/dest-rn.jpg";
@@ -76,11 +74,7 @@ function AplicarPage() {
   const { edicao } = Route.useSearch();
   const navigate = useNavigate();
 
-  const { data: famtours = [] } = useQuery({
-    queryKey: ["famtours-ativos"],
-    queryFn: getFamToursAtivos,
-    staleTime: 5 * 60 * 1000,
-  });
+  const famtours = FAMTOUR_EDITIONS;
 
   const [success, setSuccess] = useState<{
     data: PreInscricaoData;
@@ -94,9 +88,13 @@ function AplicarPage() {
     }
   };
 
-  const handleSelectEdicao = (slug: string) => {
+  const handleLearnMore = (slug: string) => {
     navigate({ to: "/", search: { edicao: slug }, hash: "form" });
     setTimeout(() => scrollTo("form"), 50);
+  };
+
+  const handleRegister = (slug: string) => {
+    navigate({ to: "/inscricao/$slug", params: { slug } });
   };
 
   return (
@@ -304,99 +302,10 @@ function AplicarPage() {
                   <FamTourCard
                     key={f.id}
                     famtour={f}
-                    onSelect={handleSelectEdicao}
+                    onLearnMore={handleLearnMore}
+                    onRegister={handleRegister}
                   />
                 ))}
-              </div>
-            </section>
-
-            {/* CTA pré-form */}
-            <section
-              style={{
-                background: "#0a2b28",
-                padding: "4rem 1.5rem",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* Esteira de fotos infinita */}
-              <PhotoMarquee />
-
-              {/* Overlay escuro para legibilidade do texto */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background: "rgba(0,0,0,0.62)",
-                  zIndex: 1,
-                }}
-              />
-              <div
-                className="relative"
-                style={{
-                  zIndex: 2,
-                  maxWidth: 600,
-                  margin: "0 auto",
-                  textAlign: "center",
-                }}
-              >
-                <h2
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontWeight: 300,
-                    fontSize: "clamp(2rem, 4vw, 3rem)",
-                    color: "#FFFFFF",
-                    lineHeight: 1.15,
-                    margin: 0,
-                  }}
-                >
-                  Famtour Nordeste • Vagas Limitadas
-                </h2>
-                <p
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.92rem",
-                    color: "rgba(255,255,255,0.95)",
-                    maxWidth: 480,
-                    margin: "1.5rem auto 2rem",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  Preencha sua pré-inscrição agora. Nossa equipe entrará em
-                  contato via WhatsApp em até 24h para confirmar sua vaga e
-                  enviar os detalhes de pagamento.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => scrollTo("form")}
-                  style={{
-                    background: "#FFFFFF",
-                    color: "#7A2535",
-                    border: "none",
-                    padding: "1.2rem 2.5rem",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: 500,
-                    fontSize: "0.9rem",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    borderRadius: 0,
-                    cursor: "pointer",
-                    width: "100%",
-                    maxWidth: 400,
-                  }}
-                >
-                  Fazer pré-inscrição →
-                </button>
-                <div
-                  style={{
-                    marginTop: "1rem",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.75rem",
-                    color: "rgba(255,255,255,0.7)",
-                  }}
-                >
-                  Sem cartão. Sem compromisso até confirmar.
-                </div>
               </div>
             </section>
 
