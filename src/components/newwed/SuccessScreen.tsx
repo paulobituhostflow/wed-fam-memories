@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { buildSuccessWhatsAppMessage } from "@/lib/famtours";
 
 type Props = {
   nome: string;
@@ -13,7 +14,7 @@ const WHATSAPP =
 
 export function SuccessScreen({ nome, telefoneFormatado, famtourNome }: Props) {
   const firstName = nome.trim().split(/\s+/)[0] ?? nome;
-  const msg = `Oi! Acabei de fazer minha pré-inscrição no FamTour Newed Destinos. Meu nome é ${nome} e quero saber mais sobre a edição ${famtourNome}.`;
+  const msg = buildSuccessWhatsAppMessage(nome, famtourNome);
   const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 
   return (

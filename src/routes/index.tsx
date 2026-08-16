@@ -1,42 +1,24 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
 import { Toaster } from "sonner";
 import { SiteShell } from "@/components/newwed/SiteShell";
 import { HeroSplit } from "@/components/newwed/HeroSplit";
-import { PhotoMarquee } from "@/components/newwed/PhotoMarquee";
 import { ParceirosLogos } from "@/components/newwed/Parceiros";
+import { PreviousEditionsCarousel } from "@/components/newwed/PreviousEditionsCarousel";
 import { FamTourCard } from "@/components/newwed/FamTourCard";
+import {
+  InterestFormHeading,
+  OpenEditionsHeading,
+} from "@/components/newwed/FamtourLandingCopy";
 import { PreInscricaoForm } from "@/components/newwed/PreInscricaoForm";
 import { SuccessScreen } from "@/components/newwed/SuccessScreen";
-import { getFamToursAtivos } from "@/lib/api";
+import { FAMTOUR_EDITIONS, toLegacyFamTour } from "@/lib/famtours";
 import type { PreInscricaoData } from "@/lib/schemas/preInscricao";
-import noronhaImg from "@/assets/fantour-noronha.jpg";
-import rioGrandeDoNorteImg from "@/assets/dest-rn.jpg";
-import alagoasImg from "@/assets/dest-milagres.jpg";
 
 const searchSchema = z.object({
   edicao: z.string().optional(),
 });
-
-const EDICOES_ANTERIORES = [
-  {
-    slug: "fernando-de-noronha",
-    title: "Fernando de Noronha",
-    image: noronhaImg,
-  },
-  {
-    slug: "rio-grande-do-norte",
-    title: "Rio Grande do Norte",
-    image: rioGrandeDoNorteImg,
-  },
-  {
-    slug: "alagoas",
-    title: "Alagoas",
-    image: alagoasImg,
-  },
-];
 
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
@@ -76,11 +58,8 @@ function AplicarPage() {
   const { edicao } = Route.useSearch();
   const navigate = useNavigate();
 
-  const { data: famtours = [] } = useQuery({
-    queryKey: ["famtours-ativos"],
-    queryFn: getFamToursAtivos,
-    staleTime: 5 * 60 * 1000,
-  });
+  const famtours = FAMTOUR_EDITIONS;
+  const formFamtours = FAMTOUR_EDITIONS.map(toLegacyFamTour);
 
   const [success, setSuccess] = useState<{
     data: PreInscricaoData;
@@ -94,9 +73,13 @@ function AplicarPage() {
     }
   };
 
-  const handleSelectEdicao = (slug: string) => {
+  const handleLearnMore = (slug: string) => {
     navigate({ to: "/", search: { edicao: slug }, hash: "form" });
     setTimeout(() => scrollTo("form"), 50);
+  };
+
+  const handleRegister = (slug: string) => {
+    navigate({ to: "/inscricao/$slug", params: { slug } });
   };
 
   return (
@@ -118,14 +101,7 @@ function AplicarPage() {
             <ParceirosLogos />
 
             {/* O que é */}
-            <section
-              style={{
-                maxWidth: 720,
-                margin: "0 auto",
-                padding: "4rem 1.5rem",
-                textAlign: "center",
-              }}
-            >
+            <section className="mx-auto max-w-[720px] px-6 py-12 text-center md:py-16">
               <Divisor>O que é</Divisor>
               <h2
                 style={{
@@ -184,273 +160,41 @@ function AplicarPage() {
             {/* Edições anteriores */}
             <section
               id="edicoes-anteriores"
+              className="mx-auto max-w-[1100px] px-6 pb-8 pt-0 md:pb-12 md:pt-4"
               style={{
-                maxWidth: 1100,
-                margin: "0 auto",
-                padding: "2rem 1.5rem 4rem",
                 scrollMarginTop: 80,
               }}
             >
               <Divisor>EDIÇÕES ANTERIORES</Divisor>
-              <div
-                className="grid grid-cols-1 md:grid-cols-3"
-                style={{ gap: "1.25rem" }}
-              >
-                {EDICOES_ANTERIORES.map(({ slug, title, image }) => (
-                  <button
-                    key={slug}
-                    type="button"
-                    data-gallery-key={slug}
-                    aria-label={`Galeria de fotos de ${title}`}
-                    className="group relative block w-full cursor-pointer overflow-hidden text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8E8E] focus-visible:ring-offset-2"
-                    style={{
-                      aspectRatio: "4 / 5",
-                      borderRadius: 0,
-                      border: 0,
-                      padding: 0,
-                      background: "#0a2b28",
-                    }}
-                  >
-                    <img
-                      src={image}
-                      alt={title}
-                      loading="lazy"
-                      className="transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-visible:scale-[1.04]"
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <div
-                      aria-hidden
-                      className="transition-opacity duration-500 group-hover:opacity-95 group-focus-visible:opacity-95"
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        background:
-                          "linear-gradient(to top, rgba(10,43,40,0.88) 0%, rgba(10,43,40,0.08) 65%)",
-                      }}
-                    />
-                    <div
-                      className="transition-transform duration-500 group-hover:-translate-y-1 group-focus-visible:-translate-y-1"
-                      style={{
-                        position: "absolute",
-                        left: "1.25rem",
-                        right: "1.25rem",
-                        bottom: "1.25rem",
-                        color: "#FFFFFF",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontFamily: "'Cormorant Garamond', serif",
-                          fontWeight: 400,
-                          fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                          lineHeight: 1.1,
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {title}
-                      </div>
-                      <div
-                        style={{
-                          marginTop: "0.65rem",
-                          fontFamily: "'DM Sans', sans-serif",
-                          fontWeight: 500,
-                          fontSize: "0.65rem",
-                          letterSpacing: "0.18em",
-                          textTransform: "uppercase",
-                          color: "rgba(255,255,255,0.72)",
-                        }}
-                      >
-                        GALERIA DE FOTOS
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <PreviousEditionsCarousel />
             </section>
 
             {/* Edições abertas */}
             <section
               id="famtours"
-              style={{
-                maxWidth: 1100,
-                margin: "0 auto",
-                padding: "3rem 1.5rem 4rem",
-              }}
+              className="mx-auto max-w-[1100px] px-6 pb-10 pt-10 md:pb-12 md:pt-12"
             >
-              <Divisor>Edições abertas</Divisor>
-              <h2
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 300,
-                  fontSize: "2.5rem",
-                  color: "#191010",
-                  textAlign: "center",
-                  margin: "0 0 2.5rem",
-                }}
-              >
-                Escolha a sua imersão.
-              </h2>
-              <div
-                className="grid grid-cols-1 md:grid-cols-2"
-                style={{ gap: "2rem" }}
-              >
+              <OpenEditionsHeading />
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
                 {famtours.map((f) => (
                   <FamTourCard
                     key={f.id}
                     famtour={f}
-                    onSelect={handleSelectEdicao}
+                    onLearnMore={handleLearnMore}
+                    onRegister={handleRegister}
                   />
                 ))}
-              </div>
-            </section>
-
-            {/* CTA pré-form */}
-            <section
-              style={{
-                background: "#0a2b28",
-                padding: "4rem 1.5rem",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* Esteira de fotos infinita */}
-              <PhotoMarquee />
-
-              {/* Overlay escuro para legibilidade do texto */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background: "rgba(0,0,0,0.62)",
-                  zIndex: 1,
-                }}
-              />
-              <div
-                className="relative"
-                style={{
-                  zIndex: 2,
-                  maxWidth: 600,
-                  margin: "0 auto",
-                  textAlign: "center",
-                }}
-              >
-                <h2
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontWeight: 300,
-                    fontSize: "clamp(2rem, 4vw, 3rem)",
-                    color: "#FFFFFF",
-                    lineHeight: 1.15,
-                    margin: 0,
-                  }}
-                >
-                  Famtour Nordeste • Vagas Limitadas
-                </h2>
-                <p
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.92rem",
-                    color: "rgba(255,255,255,0.95)",
-                    maxWidth: 480,
-                    margin: "1.5rem auto 2rem",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  Preencha sua pré-inscrição agora. Nossa equipe entrará em
-                  contato via WhatsApp em até 24h para confirmar sua vaga e
-                  enviar os detalhes de pagamento.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => scrollTo("form")}
-                  style={{
-                    background: "#FFFFFF",
-                    color: "#7A2535",
-                    border: "none",
-                    padding: "1.2rem 2.5rem",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: 500,
-                    fontSize: "0.9rem",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    borderRadius: 0,
-                    cursor: "pointer",
-                    width: "100%",
-                    maxWidth: 400,
-                  }}
-                >
-                  Fazer pré-inscrição →
-                </button>
-                <div
-                  style={{
-                    marginTop: "1rem",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.75rem",
-                    color: "rgba(255,255,255,0.7)",
-                  }}
-                >
-                  Sem cartão. Sem compromisso até confirmar.
-                </div>
               </div>
             </section>
 
             {/* Form */}
             <section
               id="form"
-              style={{
-                maxWidth: 720,
-                margin: "0 auto",
-                padding: "4rem 1.5rem",
-              }}
+              className="mx-auto max-w-[720px] px-6 pb-12 pt-10 md:py-16"
             >
-              <Divisor>Pré-inscrição</Divisor>
-              <h2
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 300,
-                  fontSize: "clamp(2rem, 4vw, 2.8rem)",
-                  color: "#191010",
-                  lineHeight: 1.15,
-                  margin: 0,
-                  textAlign: "center",
-                }}
-              >
-                Boas
-                <span
-                  style={{
-                    fontFeatureSettings: "'liga' 0, 'dlig' 0, 'calt' 0",
-                  }}
-                >
-                  -
-                </span>
-                vindas
-              </h2>
-              <p
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.92rem",
-                  lineHeight: 1.72,
-                  color: "rgba(25,16,16,0.75)",
-                  marginTop: "1.25rem",
-                  marginBottom: "2.5rem",
-                  textAlign: "center",
-                }}
-              >
-                Estamos felizes por ter você aqui. Queremos conhecer um pouco
-                sobre você e entender seu perfil. A partir desta pré-inscrição,
-                nossa equipe entrará em contato para apresentar todos os
-                detalhes da experiência, esclarecer suas dúvidas e orientar você
-                sobre os próximos passos. Preencha as informações abaixo. Será
-                um prazer ter você conosco nesta imersão.
-              </p>
+              <InterestFormHeading />
               <PreInscricaoForm
-                famtours={famtours}
+                famtours={formFamtours}
                 preSelectedSlug={edicao}
                 onSuccess={(data, famtourNome) =>
                   setSuccess({ data, famtourNome })

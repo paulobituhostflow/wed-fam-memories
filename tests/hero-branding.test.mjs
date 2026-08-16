@@ -20,9 +20,15 @@ async function renderHero() {
         import { HeroSplit } from "${path
           .resolve("src/components/newwed/HeroSplit.tsx")
           .replaceAll("\\", "/")}";
+        import { WhatsAppFloat } from "${path
+          .resolve("src/components/newwed/WhatsAppFloat.tsx")
+          .replaceAll("\\", "/")}";
 
         export const html = renderToStaticMarkup(
           React.createElement(HeroSplit, { onCta() {} }),
+        );
+        export const whatsappHtml = renderToStaticMarkup(
+          React.createElement(WhatsAppFloat),
         );
       `,
       loader: "tsx",
@@ -35,14 +41,14 @@ async function renderHero() {
   });
 
   try {
-    return projectRequire(outfile).html;
+    return projectRequire(outfile);
   } finally {
     await rm(buildDir, { recursive: true, force: true });
   }
 }
 
 test("hero renders the approved Newed Destinos logo from a transparent PNG", async () => {
-  const html = await renderHero();
+  const { html } = await renderHero();
 
   assert.match(
     html,
@@ -51,16 +57,34 @@ test("hero renders the approved Newed Destinos logo from a transparent PNG", asy
 });
 
 test("hero renders the complete approved destination list", async () => {
-  const html = await renderHero();
+  const { html } = await renderHero();
 
   assert.match(
     html,
-    /RIO GRANDE DO NORTE - ALAGOAS - FERNANDO DE NORONHA • CEARÁ/,
+    /RIO GRANDE DO NORTE • ALAGOAS • FERNANDO DE NORONHA • CEARÁ/,
   );
 });
 
 test("hero renders the standardized limited-vacancies message", async () => {
-  const html = await renderHero();
+  const { html } = await renderHero();
 
   assert.match(html, />4 EDIÇÕES • VAGAS LIMITADAS</);
+});
+
+test("hero keeps the offer and CTA inside one mobile-first visual panel", async () => {
+  const { html } = await renderHero();
+
+  assert.match(html, /min-h-\[calc\(100svh-4rem\)\]/);
+  assert.match(html, /absolute inset-x-0 top-0[^\"]*md:relative/);
+  assert.match(html, /min-h-\[calc\(100svh-4rem\)\][^\"]*md:min-h-\[90vh\]/);
+});
+
+test("WhatsApp control uses a smaller safe mobile footprint", async () => {
+  const { whatsappHtml } = await renderHero();
+
+  assert.match(whatsappHtml, /w-11 h-11/);
+  assert.match(
+    whatsappHtml,
+    /bottom-\[max\(1rem,env\(safe-area-inset-bottom\)\)\]/,
+  );
 });

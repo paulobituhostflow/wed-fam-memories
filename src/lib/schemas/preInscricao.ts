@@ -27,10 +27,10 @@ export const preInscricaoSchema = z
       tem_casal_nordeste: z.enum(["sim", "nao"], {
         errorMap: () => ({ message: "Selecione uma opção" }),
       }),
-      destino_interesse: z.enum(
-        ["NORONHA", "GOSTOSO", "PIPA", "MILAGRES", "OUTRO"],
-        { errorMap: () => ({ message: "Selecione um destino" }) },
-      ),
+      destino_interesse: z
+        .string()
+        .trim()
+        .min(1, "Informe um destino"),
       destino_outro: z.string().optional().default(""),
       expectativa: z
         .string()
@@ -41,18 +41,6 @@ export const preInscricaoSchema = z
     lgpd: z.literal(true, {
       errorMap: () => ({ message: "Necessário concordar para continuar" }),
     }),
-  })
-  .superRefine((data, ctx) => {
-    if (
-      data.respostas_brutas.destino_interesse === "OUTRO" &&
-      !data.respostas_brutas.destino_outro.trim()
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["respostas_brutas", "destino_outro"],
-        message: "Informe qual destino",
-      });
-    }
   });
 
 export type PreInscricaoData = z.infer<typeof preInscricaoSchema>;
