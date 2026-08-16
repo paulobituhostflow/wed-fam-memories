@@ -68,11 +68,23 @@ export function InscricaoPage({ edition }: PageProps) {
             </div>
           </div>
           <div className="order-1 min-h-72 overflow-hidden lg:order-2 lg:min-h-full">
-            <img
-              src={edition.imagem}
-              alt={edition.imagemAlt}
-              className="h-full w-full object-cover"
-            />
+            {edition.imagem ? (
+              <img
+                src={edition.imagem}
+                alt={edition.imagemAlt ?? `Edição ${edition.destino}`}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div
+                role="img"
+                aria-label={`Imagem da edição ${edition.destino} em atualização`}
+                className="flex h-full min-h-72 items-end bg-gradient-to-br from-[#8A2638] to-[#191010] p-8 text-white lg:min-h-full"
+              >
+                <span className="font-sans text-xs uppercase tracking-[0.16em] text-white/75">
+                  Imagem da edição em atualização
+                </span>
+              </div>
+            )}
           </div>
         </section>
 

@@ -28,13 +28,18 @@ async function loadFeatureFixture() {
         contents: `
           import React from "react";
           import { renderToStaticMarkup } from "react-dom/server";
+          import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
           import { FamTourCard } from "${sourcePath("../src/components/newwed/FamTourCard.tsx")}";
+          import { InterestFormHeading, OpenEditionsHeading } from "${sourcePath("../src/components/newwed/FamtourLandingCopy.tsx")}";
+          import { PreInscricaoForm } from "${sourcePath("../src/components/newwed/PreInscricaoForm.tsx")}";
           import { RegistrationFormPreview } from "${sourcePath("../src/components/newwed/inscricao/RegistrationFormPreview.tsx")}";
           import { RegistrationSummary } from "${sourcePath("../src/components/newwed/inscricao/RegistrationSummary.tsx")}";
           import { InscricaoPage, EditionNotFound } from "${sourcePath("../src/routes/inscricao.$slug.tsx")}";
-          import { FAMTOUR_EDITIONS, getFamtourBySlug } from "${sourcePath("../src/lib/famtours.ts")}";
+          import { buildSuccessWhatsAppMessage, FAMTOUR_EDITIONS, getFamtourBySlug, toLegacyFamTour } from "${sourcePath("../src/lib/famtours.ts")}";
 
           const edition = FAMTOUR_EDITIONS[1];
+          const cearaEdition = FAMTOUR_EDITIONS[3];
+          const queryClient = new QueryClient();
 
           export const catalog = FAMTOUR_EDITIONS.map((item) => ({
             slug: item.slug,
@@ -45,6 +50,7 @@ async function loadFeatureFixture() {
             parcelaCentavos: item.parcelaCentavos,
             valorAVistaCentavos: item.valorAVistaCentavos,
             aereoIncluso: item.aereoIncluso,
+            hasImage: Boolean(item.imagem),
           }));
           export const unknownEdition = getFamtourBySlug("inexistente");
           export const cardHtml = renderToStaticMarkup(
@@ -53,6 +59,36 @@ async function loadFeatureFixture() {
               onLearnMore: () => {},
               onRegister: () => {},
             }),
+          );
+          export const cearaCardHtml = renderToStaticMarkup(
+            React.createElement(FamTourCard, {
+              famtour: cearaEdition,
+              onLearnMore: () => {},
+              onRegister: () => {},
+            }),
+          );
+          export const landingCopyHtml = renderToStaticMarkup(
+            React.createElement(
+              React.Fragment,
+              null,
+              React.createElement(OpenEditionsHeading),
+              React.createElement(InterestFormHeading),
+            ),
+          );
+          export const interestFormHtml = renderToStaticMarkup(
+            React.createElement(
+              QueryClientProvider,
+              { client: queryClient },
+              React.createElement(PreInscricaoForm, {
+                famtours: FAMTOUR_EDITIONS.map(toLegacyFamTour),
+                preSelectedSlug: edition.slug,
+                onSuccess: () => {},
+              }),
+            ),
+          );
+          export const successMessage = buildSuccessWhatsAppMessage(
+            "Maria",
+            edition.nome,
           );
           export const formHtml = renderToStaticMarkup(
             React.createElement(RegistrationFormPreview),
@@ -63,6 +99,9 @@ async function loadFeatureFixture() {
           export const pageHtml = renderToStaticMarkup(
             React.createElement(InscricaoPage, { edition }),
           );
+          export const cearaPageHtml = renderToStaticMarkup(
+            React.createElement(InscricaoPage, { edition: cearaEdition }),
+          );
           export const notFoundHtml = renderToStaticMarkup(
             React.createElement(EditionNotFound),
           );
@@ -72,6 +111,7 @@ async function loadFeatureFixture() {
       },
       bundle: true,
       format: "cjs",
+      define: { "import.meta.env": "{}" },
       jsx: "automatic",
       loader: { ".jpg": "dataurl", ".webp": "dataurl" },
       nodePaths: [path.join(process.cwd(), "node_modules")],
@@ -106,6 +146,7 @@ test("uses one catalog for the four approved 2027 editions", async () => {
       parcelaCentavos: 64142,
       valorAVistaCentavos: 769700,
       aereoIncluso: true,
+      hasImage: true,
     },
     {
       slug: "famtour-rn-abril-2027",
@@ -116,6 +157,7 @@ test("uses one catalog for the four approved 2027 editions", async () => {
       parcelaCentavos: 58308,
       valorAVistaCentavos: 699700,
       aereoIncluso: true,
+      hasImage: true,
     },
     {
       slug: "famtour-noronha-maio-2027",
@@ -126,6 +168,7 @@ test("uses one catalog for the four approved 2027 editions", async () => {
       parcelaCentavos: 66642,
       valorAVistaCentavos: 799700,
       aereoIncluso: true,
+      hasImage: true,
     },
     {
       slug: "famtour-ceara-agosto-2027",
@@ -136,9 +179,35 @@ test("uses one catalog for the four approved 2027 editions", async () => {
       parcelaCentavos: 58308,
       valorAVistaCentavos: 699700,
       aereoIncluso: true,
+      hasImage: false,
     },
   ]);
   assert.equal(unknownEdition, undefined);
+});
+
+test("renders the approved landing copy and Famtour spelling", async () => {
+  const { landingCopyHtml, interestFormHtml, successMessage } =
+    await loadFeatureFixture();
+  const html = `${landingCopyHtml}${interestFormHtml}`;
+
+  assert.match(html, /FAMTOUR 2027/);
+  assert.match(html, />Edições abertas</);
+  assert.match(html, /Pronto para viver essa experiência\?/);
+  assert.match(
+    html,
+    /Selecione a edição que mais combina com você e conte um pouco sobre seu perfil\./,
+  );
+  assert.doesNotMatch(html, /Escolha a sua imersão|Boas-vindas/);
+  assert.doesNotMatch(`${html}${successMessage}`, /FamTour/);
+  assert.match(successMessage, /Famtour Newed Destinos/);
+});
+
+test("uses a neutral fallback when the Ceará edition has no official image", async () => {
+  const { cearaCardHtml, cearaPageHtml } = await loadFeatureFixture();
+  const html = `${cearaCardHtml}${cearaPageHtml}`;
+
+  assert.match(html, /Imagem da edição em atualização/);
+  assert.doesNotMatch(html, /dest-pernambuco/);
 });
 
 test("renders both card actions and the approved commercial hierarchy", async () => {

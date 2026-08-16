@@ -248,7 +248,7 @@ export function PreInscricaoForm({
       const famtourNome =
         famtours.find((f) => f.id === resolvedFamtourId)?.nome ??
         famtours[0]?.nome ??
-        "FamTour";
+        "Famtour";
       toast.success(
         `Pré-inscrição enviada! Em breve entraremos em contato no seu WhatsApp.`,
         { duration: 6000 },
@@ -685,7 +685,7 @@ export function PreInscricaoForm({
 
         <div data-field="respostas_brutas.expectativa">
           <label htmlFor="expectativa" style={labelStyle}>
-            Qual a sua expectativa ao participar do FamTour?{" "}
+            Qual a sua expectativa ao participar do Famtour?{" "}
             <span style={{ color: "#7A2535" }}>*</span>
           </label>
           <textarea
@@ -743,7 +743,7 @@ export function PreInscricaoForm({
         }}
       >
         Ao concluir, você autoriza a New Wed Destinos a entrar em contato via
-        WhatsApp e e-mail sobre esta pré-inscrição e o FamTour. Você pode
+        WhatsApp e e-mail sobre esta pré-inscrição e o Famtour. Você pode
         retirar essa autorização a qualquer momento.
       </p>
 

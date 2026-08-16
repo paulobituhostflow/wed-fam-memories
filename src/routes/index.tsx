@@ -6,6 +6,10 @@ import { SiteShell } from "@/components/newwed/SiteShell";
 import { HeroSplit } from "@/components/newwed/HeroSplit";
 import { ParceirosLogos } from "@/components/newwed/Parceiros";
 import { FamTourCard } from "@/components/newwed/FamTourCard";
+import {
+  InterestFormHeading,
+  OpenEditionsHeading,
+} from "@/components/newwed/FamtourLandingCopy";
 import { PreInscricaoForm } from "@/components/newwed/PreInscricaoForm";
 import { SuccessScreen } from "@/components/newwed/SuccessScreen";
 import { FAMTOUR_EDITIONS, toLegacyFamTour } from "@/lib/famtours";
@@ -282,19 +286,7 @@ function AplicarPage() {
                 padding: "3rem 1.5rem 4rem",
               }}
             >
-              <Divisor>Edições abertas</Divisor>
-              <h2
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 300,
-                  fontSize: "2.5rem",
-                  color: "#191010",
-                  textAlign: "center",
-                  margin: "0 0 2.5rem",
-                }}
-              >
-                Escolha a sua imersão.
-              </h2>
+              <OpenEditionsHeading />
               <div
                 className="grid grid-cols-1 md:grid-cols-2"
                 style={{ gap: "2rem" }}
@@ -319,46 +311,7 @@ function AplicarPage() {
                 padding: "4rem 1.5rem",
               }}
             >
-              <Divisor>Pré-inscrição</Divisor>
-              <h2
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 300,
-                  fontSize: "clamp(2rem, 4vw, 2.8rem)",
-                  color: "#191010",
-                  lineHeight: 1.15,
-                  margin: 0,
-                  textAlign: "center",
-                }}
-              >
-                Boas
-                <span
-                  style={{
-                    fontFeatureSettings: "'liga' 0, 'dlig' 0, 'calt' 0",
-                  }}
-                >
-                  -
-                </span>
-                vindas
-              </h2>
-              <p
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.92rem",
-                  lineHeight: 1.72,
-                  color: "rgba(25,16,16,0.75)",
-                  marginTop: "1.25rem",
-                  marginBottom: "2.5rem",
-                  textAlign: "center",
-                }}
-              >
-                Estamos felizes por ter você aqui. Queremos conhecer um pouco
-                sobre você e entender seu perfil. A partir desta pré-inscrição,
-                nossa equipe entrará em contato para apresentar todos os
-                detalhes da experiência, esclarecer suas dúvidas e orientar você
-                sobre os próximos passos. Preencha as informações abaixo. Será
-                um prazer ter você conosco nesta imersão.
-              </p>
+              <InterestFormHeading />
               <PreInscricaoForm
                 famtours={formFamtours}
                 preSelectedSlug={edicao}

@@ -10,12 +10,24 @@ type Props = {
 export function FamTourCard({ famtour, onLearnMore, onRegister }: Props) {
   return (
     <article className="group flex h-full flex-col border border-black/15 bg-white transition-colors hover:border-teal-600">
-      <img
-        src={famtour.imagem}
-        alt={famtour.imagemAlt}
-        loading="lazy"
-        className="h-56 w-full object-cover"
-      />
+      {famtour.imagem ? (
+        <img
+          src={famtour.imagem}
+          alt={famtour.imagemAlt ?? `Edição ${famtour.destino}`}
+          loading="lazy"
+          className="h-56 w-full object-cover"
+        />
+      ) : (
+        <div
+          role="img"
+          aria-label={`Imagem da edição ${famtour.destino} em atualização`}
+          className="flex h-56 w-full items-end bg-gradient-to-br from-[#8A2638] to-[#191010] p-6 text-white"
+        >
+          <span className="font-sans text-[0.68rem] uppercase tracking-[0.16em] text-white/75">
+            Imagem da edição em atualização
+          </span>
+        </div>
+      )}
 
       <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
         <p className="font-sans text-[0.65rem] uppercase tracking-[0.18em] text-[#2E8E8E]">
