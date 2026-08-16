@@ -1,8 +1,5 @@
 import { Check, Plane } from "lucide-react";
-import {
-  formatCurrency,
-  type FamtourEdition,
-} from "@/lib/famtours";
+import { formatCurrency, type FamtourEdition } from "@/lib/famtours";
 
 type Props = {
   edition: FamtourEdition;

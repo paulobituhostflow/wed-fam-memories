@@ -123,9 +123,7 @@ export function formatCurrency(centavos: number): string {
   }).format(centavos / 100);
 }
 
-export function getFamtourBySlug(
-  slug: string,
-): FamtourEdition | undefined {
+export function getFamtourBySlug(slug: string): FamtourEdition | undefined {
   return FAMTOUR_EDITIONS.find((edition) => edition.slug === slug);
 }
 

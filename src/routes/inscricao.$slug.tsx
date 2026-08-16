@@ -77,7 +77,7 @@ export function InscricaoPage({ edition }: PageProps) {
         </section>
 
         <section className="mx-auto max-w-7xl px-6 py-14 md:px-10 md:py-20">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+          <div className="max-w-4xl">
             <div>
               <p className="font-sans text-[0.68rem] uppercase tracking-[0.18em] text-[#2E8E8E]">
                 Resumo da experiência
@@ -102,7 +102,6 @@ export function InscricaoPage({ edition }: PageProps) {
                 ))}
               </div>
             </div>
-            <RegistrationSummary edition={edition} />
           </div>
         </section>
 
@@ -164,8 +163,8 @@ export function InscricaoPage({ edition }: PageProps) {
                   A inscrição já pode ser enviada?
                 </dt>
                 <dd className="mt-3 font-sans text-sm leading-relaxed text-black/65">
-                  Ainda não. Esta página apresenta a estrutura da inscrição,
-                  mas não envia dados e não realiza cobrança nesta etapa.
+                  Ainda não. Esta página apresenta a estrutura da inscrição, mas
+                  não envia dados e não realiza cobrança nesta etapa.
                 </dd>
               </div>
             </dl>

@@ -53,7 +53,11 @@ export function RegistrationFormPreview() {
         </p>
         <div className="mt-7 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
           <div className="md:col-span-2">
-            <Field id="nome-completo" label="Nome completo" autoComplete="name" />
+            <Field
+              id="nome-completo"
+              label="Nome completo"
+              autoComplete="name"
+            />
           </div>
           <Field
             id="email-inscricao"
@@ -83,8 +87,8 @@ export function RegistrationFormPreview() {
           Endereço de cobrança
         </legend>
         <p className="mt-2 font-sans text-sm leading-relaxed text-black/60">
-          Estes dados fazem parte do modelo de inscrição New Wed, mas não
-          serão armazenados agora.
+          Estes dados fazem parte do modelo de inscrição New Wed, mas não serão
+          armazenados agora.
         </p>
         <div className="mt-7 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-6">
           <div className="md:col-span-2">
@@ -124,11 +128,7 @@ export function RegistrationFormPreview() {
             />
           </div>
           <div className="md:col-span-1">
-            <Field
-              id="uf-inscricao"
-              label="UF"
-              autoComplete="address-level1"
-            />
+            <Field id="uf-inscricao" label="UF" autoComplete="address-level1" />
           </div>
         </div>
       </fieldset>

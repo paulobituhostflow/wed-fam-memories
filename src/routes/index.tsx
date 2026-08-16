@@ -8,7 +8,7 @@ import { ParceirosLogos } from "@/components/newwed/Parceiros";
 import { FamTourCard } from "@/components/newwed/FamTourCard";
 import { PreInscricaoForm } from "@/components/newwed/PreInscricaoForm";
 import { SuccessScreen } from "@/components/newwed/SuccessScreen";
-import { FAMTOUR_EDITIONS } from "@/lib/famtours";
+import { FAMTOUR_EDITIONS, toLegacyFamTour } from "@/lib/famtours";
 import type { PreInscricaoData } from "@/lib/schemas/preInscricao";
 import noronhaImg from "@/assets/fantour-noronha.jpg";
 import rioGrandeDoNorteImg from "@/assets/dest-rn.jpg";
@@ -75,6 +75,7 @@ function AplicarPage() {
   const navigate = useNavigate();
 
   const famtours = FAMTOUR_EDITIONS;
+  const formFamtours = FAMTOUR_EDITIONS.map(toLegacyFamTour);
 
   const [success, setSuccess] = useState<{
     data: PreInscricaoData;
@@ -359,7 +360,7 @@ function AplicarPage() {
                 um prazer ter você conosco nesta imersão.
               </p>
               <PreInscricaoForm
-                famtours={famtours}
+                famtours={formFamtours}
                 preSelectedSlug={edicao}
                 onSuccess={(data, famtourNome) =>
                   setSuccess({ data, famtourNome })
