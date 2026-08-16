@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -53,17 +53,6 @@ function imageAttributes(html) {
   }));
 }
 
-async function pngDimensions(filePath) {
-  const buffer = await readFile(filePath);
-
-  assert.equal(buffer.toString("ascii", 1, 4), "PNG");
-
-  return {
-    width: buffer.readUInt32BE(16),
-    height: buffer.readUInt32BE(20),
-  };
-}
-
 test("renders the four official partner logos in the approved order", async () => {
   const html = await renderPartners();
 
@@ -82,23 +71,22 @@ test("renders a compact single-row logo ticker", async () => {
   assert.match(html, />MARCAS E PARCEIROS</);
   assert.match(html, /role="list"/);
   assert.equal((html.match(/role="listitem"/g) ?? []).length, 4);
-  assert.match(html, /style="[^"]*padding:28px 24px/);
+  assert.match(html, /style="[^"]*padding:24px clamp\(24px, 4vw, 48px\)/);
   assert.match(html, /style="[^"]*display:flex[^"]*flex-wrap:nowrap/);
   assert.match(html, /style="[^"]*overflow-x:auto/);
+  assert.match(html, /font-size:0\.62rem/);
+  assert.match(html, /height:40px/);
   assert.doesNotMatch(html, /marcas-parceiros-composicao-compacta\.png/);
 });
 
-test("uses a clean strip of the approved background texture", async () => {
+test("uses a smooth burgundy gradient without texture or outer frame", async () => {
   const html = await renderPartners();
 
-  assert.match(
-    html,
-    /background-image:url\(\/marcas-parceiros-fundo-faixa\.png\)/,
-  );
-
-  const dimensions = await pngDimensions(
-    path.resolve(testDir, "../public/marcas-parceiros-fundo-faixa.png"),
-  );
-
-  assert.deepEqual(dimensions, { width: 1740, height: 200 });
+  assert.match(html, /linear-gradient\([^)]*#8A2638[^)]*#5A1020[^)]*\)/);
+  assert.doesNotMatch(html, /background-image/);
+  assert.doesNotMatch(html, /border:[^;]*#E7C88A/i);
+  assert.match(html, /height:32px;max-height:32px/);
+  assert.match(html, /height:34px;max-height:34px/);
+  assert.match(html, /height:48px;max-height:48px/);
+  assert.match(html, /height:42px;max-height:42px/);
 });

@@ -17,6 +17,7 @@ import { Route as DestinosRouteImport } from './routes/destinos'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as AplicarRouteImport } from './routes/aplicar'
 import { Route as InscricaoSlugRouteImport } from './routes/inscricao.$slug'
+import { Route as EdicoesSlugRouteImport } from './routes/edicoes.$slug'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WorkshopRoute = WorkshopRouteImport.update({
@@ -59,6 +60,11 @@ const InscricaoSlugRoute = InscricaoSlugRouteImport.update({
   path: '/inscricao/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EdicoesSlugRoute = EdicoesSlugRouteImport.update({
+  id: '/edicoes/$slug',
+  path: '/edicoes/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/aplicar': typeof AplicarRoute
   '/contato': typeof ContatoRoute
   '/destinos': typeof DestinosRoute
+  '/edicoes/$slug': typeof EdicoesSlugRoute
   '/feira': typeof FeiraRoute
   '/guia': typeof GuiaRoute
   '/inscricao/$slug': typeof InscricaoSlugRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/aplicar': typeof AplicarRoute
   '/contato': typeof ContatoRoute
   '/destinos': typeof DestinosRoute
+  '/edicoes/$slug': typeof EdicoesSlugRoute
   '/feira': typeof FeiraRoute
   '/guia': typeof GuiaRoute
   '/inscricao/$slug': typeof InscricaoSlugRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/aplicar': typeof AplicarRoute
   '/contato': typeof ContatoRoute
   '/destinos': typeof DestinosRoute
+  '/edicoes/$slug': typeof EdicoesSlugRoute
   '/feira': typeof FeiraRoute
   '/guia': typeof GuiaRoute
   '/inscricao/$slug': typeof InscricaoSlugRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/aplicar'
     | '/contato'
     | '/destinos'
+    | '/edicoes/$slug'
     | '/feira'
     | '/guia'
     | '/inscricao/$slug'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/aplicar'
     | '/contato'
     | '/destinos'
+    | '/edicoes/$slug'
     | '/feira'
     | '/guia'
     | '/inscricao/$slug'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/aplicar'
     | '/contato'
     | '/destinos'
+    | '/edicoes/$slug'
     | '/feira'
     | '/guia'
     | '/inscricao/$slug'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AplicarRoute: typeof AplicarRoute
   ContatoRoute: typeof ContatoRoute
   DestinosRoute: typeof DestinosRoute
+  EdicoesSlugRoute: typeof EdicoesSlugRoute
   FeiraRoute: typeof FeiraRoute
   GuiaRoute: typeof GuiaRoute
   InscricaoSlugRoute: typeof InscricaoSlugRoute
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AplicarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/edicoes/$slug': {
+      id: '/edicoes/$slug'
+      path: '/edicoes/$slug'
+      fullPath: '/edicoes/$slug'
+      preLoaderRoute: typeof EdicoesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AplicarRoute: AplicarRoute,
   ContatoRoute: ContatoRoute,
   DestinosRoute: DestinosRoute,
+  EdicoesSlugRoute: EdicoesSlugRoute,
   FeiraRoute: FeiraRoute,
   GuiaRoute: GuiaRoute,
   InscricaoSlugRoute: InscricaoSlugRoute,

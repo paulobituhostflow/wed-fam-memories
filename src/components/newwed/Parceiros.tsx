@@ -2,31 +2,31 @@ const PARCEIROS = [
   {
     name: "Azul",
     src: "/azul- branca.webp",
-    height: 36,
+    height: 32,
   },
   {
     name: "Casar.com",
     src: "/casar-logo-white.svg",
-    height: 38,
+    height: 34,
   },
   {
     name: "Assessoria VIP",
     src: "/assessoria-vip-white.png",
-    height: 64,
+    height: 48,
   },
   {
     name: "Empetur",
     src: "/empetur - Branca.webp",
-    height: 50,
+    height: 42,
   },
 ] as const;
 
 const dividerStyle = {
   width: 1,
-  height: 48,
-  margin: "0 24px",
+  height: 40,
+  margin: "0 clamp(12px, 1.7vw, 22px)",
   flex: "0 0 auto",
-  background: "rgba(231, 200, 138, 0.78)",
+  background: "rgba(231, 200, 138, 0.58)",
 } as const;
 
 /** Faixa compacta de marcas parceiras, com rolagem horizontal no mobile. */
@@ -38,20 +38,16 @@ export function ParceirosLogos() {
         width: "100%",
         margin: 0,
         overflow: "hidden",
-        backgroundColor: "#360005",
-        backgroundImage: "url(/marcas-parceiros-fundo-faixa.png)",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        background: "linear-gradient(100deg, #8A2638 0%, #5A1020 100%)",
       }}
     >
       <div
         className="partners-logo-ticker [&::-webkit-scrollbar]:hidden"
         style={{
           width: "100%",
-          maxWidth: 1280,
+          maxWidth: 1320,
           margin: "0 auto",
-          padding: "28px 24px",
+          padding: "24px clamp(24px, 4vw, 48px)",
           display: "flex",
           flexWrap: "nowrap",
           alignItems: "center",
@@ -65,7 +61,7 @@ export function ParceirosLogos() {
             flex: "0 0 auto",
             color: "#E7C88A",
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: "0.72rem",
+            fontSize: "0.62rem",
             fontWeight: 500,
             letterSpacing: "0.22em",
             lineHeight: 1,
