@@ -1,6 +1,6 @@
 # Fluxo de inscrição dos Famtours New Wed 2027
 
-**Status:** aprovado para implementação  
+**Status:** aprovado para implementação
 **Data:** 16 de agosto de 2026
 
 ## 1. Contexto
