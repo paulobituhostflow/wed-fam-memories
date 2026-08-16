@@ -247,11 +247,17 @@ test("uses a neutral fallback when the Ceará edition has no official image", as
 test("renders both card actions and the approved commercial hierarchy", async () => {
   const { cardHtml } = await loadFeatureFixture();
   const html = normalizeCurrency(cardHtml);
+  const airfareIndex = html.indexOf("AÉREO INCLUSO");
+  const includedItemsIndex = html.indexOf("Hospedagem em pousada selecionada");
+  const installmentIndex = html.indexOf("12x de R$ 583,08");
 
   assert.match(html, /AÉREO INCLUSO/);
   assert.match(html, /18 VAGAS/);
   assert.match(html, /12x de R\$ 583,08/);
-  assert.match(html, /R\$ 6\.997,00 à vista/);
+  assert.match(html, /ou R\$ 6\.997,00 à vista/);
+  assert.ok(airfareIndex < includedItemsIndex);
+  assert.ok(includedItemsIndex < installmentIndex);
+  assert.match(html, /text-left sm:text-right/);
   assert.match(html, />SABER MAIS</);
   assert.match(html, />FAZER INSCRIÇÃO</);
   assert.doesNotMatch(html, /10X|CONSULTE TAXAS|PRÉ-INSCRIÇÃO/);

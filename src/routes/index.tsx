@@ -101,14 +101,7 @@ function AplicarPage() {
             <ParceirosLogos />
 
             {/* O que é */}
-            <section
-              style={{
-                maxWidth: 720,
-                margin: "0 auto",
-                padding: "4rem 1.5rem",
-                textAlign: "center",
-              }}
-            >
+            <section className="mx-auto max-w-[720px] px-6 py-12 text-center md:py-16">
               <Divisor>O que é</Divisor>
               <h2
                 style={{
@@ -167,10 +160,8 @@ function AplicarPage() {
             {/* Edições anteriores */}
             <section
               id="edicoes-anteriores"
+              className="mx-auto max-w-[1100px] px-6 pb-8 pt-0 md:pb-12 md:pt-4"
               style={{
-                maxWidth: 1100,
-                margin: "0 auto",
-                padding: "1rem 1.5rem 4rem",
                 scrollMarginTop: 80,
               }}
             >
@@ -181,17 +172,10 @@ function AplicarPage() {
             {/* Edições abertas */}
             <section
               id="famtours"
-              style={{
-                maxWidth: 1100,
-                margin: "0 auto",
-                padding: "3rem 1.5rem 4rem",
-              }}
+              className="mx-auto max-w-[1100px] px-6 pb-10 pt-10 md:pb-12 md:pt-12"
             >
               <OpenEditionsHeading />
-              <div
-                className="grid grid-cols-1 md:grid-cols-2"
-                style={{ gap: "2rem" }}
-              >
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
                 {famtours.map((f) => (
                   <FamTourCard
                     key={f.id}
@@ -206,11 +190,7 @@ function AplicarPage() {
             {/* Form */}
             <section
               id="form"
-              style={{
-                maxWidth: 720,
-                margin: "0 auto",
-                padding: "4rem 1.5rem",
-              }}
+              className="mx-auto max-w-[720px] px-6 pb-12 pt-10 md:py-16"
             >
               <InterestFormHeading />
               <PreInscricaoForm

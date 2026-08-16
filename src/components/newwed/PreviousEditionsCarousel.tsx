@@ -18,7 +18,7 @@ export function PreviousEditionsCarousel() {
 
   return (
     <div>
-      <div className="mb-5 flex justify-end gap-2">
+      <div className="mb-5 hidden justify-end gap-2 md:flex">
         <button
           type="button"
           aria-label="Edição anterior"
@@ -39,7 +39,7 @@ export function PreviousEditionsCarousel() {
 
       <div
         ref={trackRef}
-        className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 md:gap-5 [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: "none" }}
       >
         {PREVIOUS_EDITIONS.map((edicao) => (
@@ -48,7 +48,7 @@ export function PreviousEditionsCarousel() {
             to="/edicoes/$slug"
             params={{ slug: edicao.slug }}
             aria-label={`Ver galeria da edição ${edicao.destino} ${edicao.ano}`}
-            className="group relative block aspect-[4/5] min-w-0 flex-[0_0_86%] snap-start overflow-hidden bg-[#0A2B28] text-left sm:flex-[0_0_60%] lg:flex-[0_0_calc((100%_-_2.5rem)/3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8E8E] focus-visible:ring-offset-2"
+            className="group relative block aspect-[4/5] min-w-0 flex-[0_0_86%] snap-start overflow-hidden bg-[#0A2B28] text-left shadow-[0_16px_36px_rgba(10,43,40,0.12)] sm:flex-[0_0_60%] lg:flex-[0_0_calc((100%_-_2.5rem)/3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E8E8E] focus-visible:ring-offset-2"
           >
             <img
               src={edicao.capa}
@@ -60,7 +60,7 @@ export function PreviousEditionsCarousel() {
               aria-hidden="true"
               className="absolute inset-0 bg-[linear-gradient(to_top,rgba(10,43,40,0.92)_0%,rgba(10,43,40,0.08)_68%)] transition-opacity duration-500 group-hover:opacity-95"
             />
-            <span className="absolute inset-x-0 bottom-0 block p-6 text-white transition-transform duration-500 group-hover:-translate-y-1 group-focus-visible:-translate-y-1">
+            <span className="absolute inset-x-0 bottom-0 block p-5 text-white transition-transform duration-500 md:p-6 group-hover:-translate-y-1 group-focus-visible:-translate-y-1">
               <span className="block font-serif text-[clamp(1.7rem,3vw,2.2rem)] font-normal uppercase leading-[1.02]">
                 {edicao.destino}
               </span>

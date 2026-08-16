@@ -72,6 +72,7 @@ test("renders a scalable snap carousel with clickable editorial covers", async (
   assert.match(carousel, /overflow-x-auto/);
   assert.match(carousel, /flex-\[0_0_86%\]/);
   assert.match(carousel, /lg:flex-\[0_0_calc\(\(100%_-_2\.5rem\)\/3\)\]/);
+  assert.match(carousel, /hidden justify-end gap-2 md:flex/);
   assert.match(carousel, /aria-label="Edição anterior"/);
   assert.match(carousel, /aria-label="Próxima edição"/);
   assert.match(carousel, /to="\/edicoes\/\$slug"/);

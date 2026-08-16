@@ -41,18 +41,16 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
 
   return (
     <section
-      className="relative grid grid-cols-1 md:grid-cols-[40%_60%]"
-      style={{ minHeight: "90vh" }}
+      className="relative grid min-h-[calc(100svh-4rem)] grid-cols-1 overflow-hidden md:min-h-[90vh] md:grid-cols-[36%_64%]"
     >
       {/* ── Painel esquerdo — branco ── */}
-      <div className="flex flex-col items-center justify-center bg-white px-8 py-16">
+      <div className="absolute inset-x-0 top-0 z-[4] flex flex-col items-start px-5 pt-5 md:relative md:items-center md:justify-center md:bg-white md:px-8 md:py-16">
         <div
+          className="w-full max-w-[230px] bg-white/95 px-4 py-3 shadow-[0_12px_36px_rgba(25,16,16,0.12)] md:max-w-[360px] md:bg-transparent md:p-0 md:shadow-none"
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            width: "100%",
-            maxWidth: 360,
             textAlign: "center",
           }}
         >
@@ -61,48 +59,45 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
             alt="Newed Destinos"
             width={225}
             height={225}
+            className="w-full max-w-[150px] md:max-w-[225px]"
             style={{
               display: "block",
-              width: "100%",
-              maxWidth: 225,
               height: "auto",
               objectFit: "contain",
             }}
           />
           <div
+            className="mt-1.5 text-[0.54rem] md:mt-5 md:text-[clamp(0.62rem,1.2vw,0.78rem)]"
             style={{
-              marginTop: "1.25rem",
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 500,
               letterSpacing: "0.12em",
-              fontSize: "clamp(0.62rem, 1.2vw, 0.78rem)",
               color: "#2E8E8E",
-              lineHeight: 1.7,
+              lineHeight: 1.6,
               textTransform: "uppercase",
             }}
           >
             RIO GRANDE DO NORTE • ALAGOAS • FERNANDO DE NORONHA • CEARÁ
           </div>
-        </div>
-        <div
-          style={{
-            marginTop: "2rem",
-            fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 400,
-            fontSize: "0.7rem",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "#2E8E8E",
-          }}
-        >
-          FAMTOUR • EDIÇÃO 2027
+          <div
+            className="mt-2 text-[0.56rem] md:mt-8 md:text-[0.7rem]"
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 400,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "#2E8E8E",
+            }}
+          >
+            FAMTOUR • EDIÇÃO 2027
+          </div>
         </div>
       </div>
 
       {/* ── Painel direito — carrossel com fade ── */}
       <div
-        className="relative overflow-hidden"
-        style={{ background: "#0a2b28", minHeight: "inherit" }}
+        className="relative min-h-[calc(100svh-4rem)] overflow-hidden md:min-h-[90vh]"
+        style={{ background: "#0a2b28" }}
       >
         {/* Camadas de imagem: todas absolutas, só a ativa tem opacity 1 */}
         {SLIDES.map((src, i) => (
@@ -135,8 +130,7 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
 
         {/* Conteúdo textual — acima de tudo */}
         <div
-          className="relative flex flex-col items-start justify-center px-8 py-20 md:px-16"
-          style={{ minHeight: "90vh", zIndex: 3 }}
+          className="relative z-[3] flex min-h-[calc(100svh-4rem)] flex-col items-start justify-end px-6 pb-20 pt-52 sm:px-8 md:min-h-[90vh] md:justify-center md:px-16 md:py-20"
         >
           <div className="max-w-xl">
             <div
@@ -152,7 +146,7 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
                 fontFamily: "'Anton', sans-serif",
                 fontWeight: 400,
                 textTransform: "uppercase",
-                fontSize: "clamp(2.5rem, 6vw, 5rem)",
+                fontSize: "clamp(3rem, 14vw, 5rem)",
                 color: "#FFFFFF",
                 lineHeight: 1.15,
                 margin: 0,
@@ -175,6 +169,7 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
             <button
               type="button"
               onClick={onCta}
+              className="w-full max-w-[290px] md:w-auto"
               style={{
                 background: "#FFFFFF",
                 color: "#7A2535",
@@ -206,7 +201,7 @@ export function HeroSplit({ onCta }: { onCta: () => void }) {
 
           {/* Indicadores de slide (bolinhas) */}
           {SLIDES.length > 1 && (
-            <div className="absolute bottom-6 left-8 flex gap-2 md:left-16">
+            <div className="absolute bottom-6 right-6 flex gap-2 md:left-16 md:right-auto">
               {SLIDES.map((_, i) => (
                 <button
                   key={i}

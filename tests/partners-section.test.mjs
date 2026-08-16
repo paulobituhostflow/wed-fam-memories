@@ -48,7 +48,7 @@ async function renderPartners() {
 
 function imageAttributes(html) {
   return [...html.matchAll(/<img\b[^>]*>/g)].map(([tag]) => ({
-    alt: tag.match(/\balt="([^"]+)"/)?.[1],
+    alt: tag.match(/\balt="([^"]*)"/)?.[1],
     src: tag.match(/\bsrc="([^"]+)"/)?.[1],
   }));
 }
@@ -56,7 +56,7 @@ function imageAttributes(html) {
 test("renders the four official partner logos in the approved order", async () => {
   const html = await renderPartners();
 
-  assert.deepEqual(imageAttributes(html), [
+  assert.deepEqual(imageAttributes(html).filter(({ alt }) => alt), [
     { alt: "Azul", src: "/azul- branca.webp" },
     { alt: "Casar.com", src: "/casar-logo-white.svg" },
     { alt: "Assessoria VIP", src: "/assessoria-vip-white.png" },
@@ -71,12 +71,25 @@ test("renders a compact single-row logo ticker", async () => {
   assert.match(html, />MARCAS E PARCEIROS</);
   assert.match(html, /role="list"/);
   assert.equal((html.match(/role="listitem"/g) ?? []).length, 4);
-  assert.match(html, /style="[^"]*padding:24px clamp\(24px, 4vw, 48px\)/);
+  assert.match(html, /style="[^"]*padding:20px clamp\(16px, 4vw, 48px\)/);
   assert.match(html, /style="[^"]*display:flex[^"]*flex-wrap:nowrap/);
-  assert.match(html, /style="[^"]*overflow-x:auto/);
+  assert.match(html, /partners-marquee-track/);
+  assert.match(html, /@keyframes partners-marquee/);
+  assert.match(html, /prefers-reduced-motion: reduce/);
+  assert.match(html, /tabindex="0"/);
+  assert.match(html, /animation-play-state: paused/);
   assert.match(html, /font-size:0\.62rem/);
   assert.match(html, /height:40px/);
   assert.doesNotMatch(html, /marcas-parceiros-composicao-compacta\.png/);
+});
+
+test("keeps four accessible logos while duplicating only the visual ticker", async () => {
+  const html = await renderPartners();
+  const images = imageAttributes(html);
+
+  assert.equal(images.filter(({ alt }) => alt).length, 4);
+  assert.equal(images.filter(({ alt }) => alt === "").length, 4);
+  assert.match(html, /aria-hidden="true"/);
 });
 
 test("uses a smooth burgundy gradient without texture or outer frame", async () => {

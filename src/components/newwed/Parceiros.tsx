@@ -29,7 +29,96 @@ const dividerStyle = {
   background: "rgba(231, 200, 138, 0.58)",
 } as const;
 
-/** Faixa compacta de marcas parceiras, com rolagem horizontal no mobile. */
+type Partner = (typeof PARCEIROS)[number];
+
+function PartnerLogo({
+  partner,
+  decorative,
+  showDivider,
+}: {
+  partner: Partner;
+  decorative: boolean;
+  showDivider: boolean;
+}) {
+  const { name, src, height } = partner;
+
+  return (
+    <li
+      role={decorative ? undefined : "listitem"}
+      style={{
+        display: "flex",
+        flex: "0 0 auto",
+        alignItems: "center",
+      }}
+    >
+      <img
+        src={src}
+        alt={decorative ? "" : name}
+        loading="lazy"
+        style={{
+          display: "block",
+          width: "auto",
+          height,
+          maxHeight: height,
+          objectFit: "contain",
+          flex: "0 0 auto",
+        }}
+        onError={(event) => {
+          event.currentTarget.style.display = "none";
+          const fallback = event.currentTarget
+            .nextElementSibling as HTMLElement | null;
+          if (fallback) fallback.style.display = "inline-block";
+        }}
+      />
+      <span
+        aria-hidden={decorative || undefined}
+        style={{
+          display: "none",
+          color: "#FFFFFF",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "0.78rem",
+          fontWeight: 500,
+          letterSpacing: "0.08em",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {name}
+      </span>
+      {showDivider ? <span aria-hidden="true" style={dividerStyle} /> : null}
+    </li>
+  );
+}
+
+function PartnerList({ decorative = false }: { decorative?: boolean }) {
+  return (
+    <ul
+      aria-label={decorative ? undefined : "Logomarcas parceiras"}
+      aria-hidden={decorative || undefined}
+      role={decorative ? undefined : "list"}
+      className={`partners-logo-list${decorative ? " partners-logo-list--duplicate" : ""}`}
+      style={{
+        margin: 0,
+        padding: 0,
+        display: "flex",
+        flex: "0 0 auto",
+        flexWrap: "nowrap",
+        alignItems: "center",
+        listStyle: "none",
+      }}
+    >
+      {PARCEIROS.map((partner, index) => (
+        <PartnerLogo
+          key={`${decorative ? "duplicate" : "primary"}-${partner.name}`}
+          partner={partner}
+          decorative={decorative}
+          showDivider={index < PARCEIROS.length - 1}
+        />
+      ))}
+    </ul>
+  );
+}
+
+/** Faixa compacta de marcas parceiras, com ticker contínuo no mobile. */
 export function ParceirosLogos() {
   return (
     <section
@@ -42,17 +131,15 @@ export function ParceirosLogos() {
       }}
     >
       <div
-        className="partners-logo-ticker [&::-webkit-scrollbar]:hidden"
+        className="partners-logo-ticker"
         style={{
           width: "100%",
           maxWidth: 1320,
           margin: "0 auto",
-          padding: "24px clamp(24px, 4vw, 48px)",
+          padding: "20px clamp(16px, 4vw, 48px)",
           display: "flex",
           flexWrap: "nowrap",
           alignItems: "center",
-          overflowX: "auto",
-          scrollbarWidth: "none",
         }}
       >
         <p
@@ -73,68 +160,72 @@ export function ParceirosLogos() {
 
         <span aria-hidden="true" style={dividerStyle} />
 
-        <ul
-          aria-label="Logomarcas parceiras"
-          role="list"
-          style={{
-            margin: 0,
-            padding: 0,
-            display: "flex",
-            flex: "1 0 auto",
-            flexWrap: "nowrap",
-            alignItems: "center",
-            listStyle: "none",
-          }}
+        <div
+          aria-label="Logomarcas parceiras em movimento; mantenha o foco para pausar"
+          className="partners-marquee-viewport min-w-0 flex-1 overflow-hidden"
+          tabIndex={0}
         >
-          {PARCEIROS.map(({ name, src, height }, index) => (
-            <li
-              key={name}
-              role="listitem"
-              style={{
-                display: "flex",
-                flex: "0 0 auto",
-                alignItems: "center",
-              }}
-            >
-              <img
-                src={src}
-                alt={name}
-                loading="lazy"
-                style={{
-                  display: "block",
-                  width: "auto",
-                  height,
-                  maxHeight: height,
-                  objectFit: "contain",
-                  flex: "0 0 auto",
-                }}
-                onError={(event) => {
-                  event.currentTarget.style.display = "none";
-                  const fallback = event.currentTarget
-                    .nextElementSibling as HTMLElement | null;
-                  if (fallback) fallback.style.display = "inline-block";
-                }}
-              />
-              <span
-                style={{
-                  display: "none",
-                  color: "#FFFFFF",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.78rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {name}
-              </span>
-              {index < PARCEIROS.length - 1 ? (
-                <span aria-hidden="true" style={dividerStyle} />
-              ) : null}
-            </li>
-          ))}
-        </ul>
+          <div className="partners-marquee-track">
+            <PartnerList />
+            <PartnerList decorative />
+          </div>
+        </div>
       </div>
+      <style>{`
+        @keyframes partners-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        .partners-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: partners-marquee 18s linear infinite;
+          will-change: transform;
+        }
+
+        .partners-marquee-viewport:hover .partners-marquee-track,
+        .partners-marquee-viewport:focus-within .partners-marquee-track {
+          animation-play-state: paused;
+        }
+
+        .partners-logo-list {
+          padding-right: 24px !important;
+        }
+
+        @media (min-width: 768px) {
+          .partners-marquee-track {
+            width: 100%;
+            animation: none;
+          }
+
+          .partners-logo-list {
+            width: 100%;
+            flex: 1 1 auto !important;
+            justify-content: space-between;
+            padding-right: 0 !important;
+          }
+
+          .partners-logo-list--duplicate {
+            display: none !important;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .partners-marquee-track {
+            animation: none;
+          }
+
+          .partners-marquee-viewport {
+            overflow-x: auto;
+            scrollbar-width: none;
+          }
+
+          .partners-logo-list--duplicate {
+            display: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
